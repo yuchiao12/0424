@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sketch</title>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script src="libraries/p5.min.js"></script>
+    <script src="libraries/p5.sound.min.js"></script>
+    <script>
+      // JavaScript 控制 iframe 顯示與隱藏
+      function toggleIframe(target) {
+        const iframe = document.getElementById('iframe-display');
+        if (target === 'home') {
+          iframe.style.display = 'none'; // 隱藏 iframe
+        } else {
+          iframe.style.display = 'block'; // 顯示 iframe
+        }
+      }
+
+      // 控制選單顯示與隱藏
+      document.addEventListener('mousemove', (event) => {
+        const menu = document.querySelector('.menu');
+        if (event.clientY < 250) {
+          menu.style.top = '10px'; // 顯示選單
+          menu.style.opacity = '1';
+        } else {
+          menu.style.top = '-50px'; // 隱藏選單
+          menu.style.opacity = '0';
+        }
+      });
+
+      // 顯示影片的函式
+      function showVideo() {
+        const videoContainer = document.getElementById('video-container');
+        videoContainer.style.display = 'block'; // 顯示影片
+      }
+
+      // 按鈕動畫與開啟連結的函式
+      function openYouTube() {
+        const button = document.querySelector('.animated-button');
+        button.style.transform = 'scale(1.1)';
+        button.style.transition = 'transform 0.2s';
+
+        setTimeout(() => {
+          button.style.transform = 'scale(1)';
+          window.open('https://youtube.com/shorts/WtGmXOuL7jE?si=N-q41-l6S0WA4XKD', '_blank');
+        }, 200);
+      }
+
+      // 啟動測驗的函式
+      function startQuiz() {
+        const quizContainer = document.getElementById("quiz-container");
+        quizContainer.innerHTML = `
+          <h3>請選擇難度：</h3>
+          <button class="difficulty-button" onclick="startEasyQuiz()">簡單</button>
+          <button class="difficulty-button" onclick="startMediumQuiz()">中等</button>
+          <button class="difficulty-button" onclick="startHardQuiz()">困難</button>
+        `;
+        quizContainer.style.display = "block";
+      }
+
+      // 顯示「你真棒！」動畫特效
+      function showCongratsAnimation() {
+        const body = document.body;
+        const animationDiv = document.createElement("div");
+        animationDiv.className = "congrats-animation";
+        animationDiv.innerHTML = "🎉 你真棒！ 🎉";
+        body.appendChild(animationDiv);
+
+        // 3秒後移除動畫
+        setTimeout(() => {
+          body.removeChild(animationDiv);
+        }, 3000);
+      }
+
+      // 簡單模式測驗
+      function startEasyQuiz() {
+        const questions = [
+          {
+            question: "人體有幾個肺？",
+            options: ["A. 1個", "B. 2個", "C. 3個", "D. 4個"],
+            answer: "B. 2個"
+          },
+          {
+            question: "下列哪一種動物是哺乳類？",
+            options: ["A. 企鵝", "B. 烏龜", "C. 鯨魚", "D. 鯊魚"],
+            answer: "C. 鯨魚"
+          },
+          {
+            question: "鹽是由哪兩種元素組成的？",
+            options: ["A. 氫和氧", "B. 鈉和氯", "C. 鋅和硫", "D. 銅和氯"],
+            answer: "B. 鈉和氯"
+          },
+          {
+            question: "哪一個器官負責過濾血液中的廢物？",
+            options: ["A. 肺", "B. 心臟", "C. 肝臟", "D. 腎臟"],
+            answer: "D. 腎臟"
+          },
+          {
+            question: "地球上的水最多集中在哪裡？",
+            options: ["A. 湖泊", "B. 河流", "C. 冰川", "D. 海洋"],
+            answer: "D. 海洋"
+          }
+        ];
+        runQuiz(questions);
+      }
+
+      // 中等模式測驗
+      function startMediumQuiz() {
+        const questions = [
+          {
+            question: "下列哪一種食物不應該和菠菜一起大量食用？",
+            options: ["A. 豆腐", "B. 白飯", "C. 牛肉", "D. 馬鈴薯"],
+            answer: "A. 豆腐"
+          },
+          {
+            question: "哪一種食物其實含有最多維他命C？",
+            options: ["A. 檸檬", "B. 奇異果", "C. 柳橙", "D. 紅甜椒"],
+            answer: "D. 紅甜椒"
+          },
+          {
+            question: "下列哪一樣食材不該用塑膠袋密封存放？",
+            options: ["A. 洋蔥", "B. 胡蘿蔔", "C. 青江菜", "D. 雞胸肉（冷凍）"],
+            answer: "A. 洋蔥"
+          },
+          {
+            question: "哪一樣看起來健康，其實含糖量可能爆表？",
+            options: ["A. 原味優格", "B. 低脂牛奶", "C. 鮮榨果汁", "D. 水煮玉米"],
+            answer: "C. 鮮榨果汁"
+          },
+          {
+            question: "炒菜時哪一種油最不適合高溫快炒？",
+            options: ["A. 橄欖油（初榨）", "B. 花生油", "C. 芝麻油", "D. 葵花油"],
+            answer: "A. 橄欖油（初榨）"
+          }
+        ];
+        runQuiz(questions);
+      }
+
+      // 困難模式測驗
+      function startHardQuiz() {
+        const questions = [
+          {
+            question: "在荷蘭的歷史中，哪個曾經存在的政治體系被稱為“荷蘭聯邦”，這個體系成立的主要目的是什麼？",
+            options: ["A. 統一荷蘭各地的貿易路線", "B. 組織對抗西班牙的獨立戰爭", "C. 促進工業革命", "D. 實行國王絕對統治"],
+            answer: "B. 組織對抗西班牙的獨立戰爭"
+          },
+          {
+            question: "在葡萄牙，如果你把餐巾紙放在盤子裡，這代表什麼意思？",
+            options: ["A. 給餐廳小費", "B. 表示不滿意食物", "C. 在表示感謝後結束用餐", "D. 願意再來一次"],
+            answer: "B. 表示不滿意食物"
+          },
+          {
+            question: "在塞爾維亞，有一個古老的習俗，當人們結婚時，傳統上應該做什麼？",
+            options: ["A. 在家中舉行一場盛大宴會", "B. 交換紅色絲帶作為愛的象徵", "C. 新娘和新郎在婚禮當天不能見面，直到儀式結束", "D. 在婚禮上撒花瓣作為祝福"],
+            answer: "C. 新娘和新郎在婚禮當天不能見面，直到儀式結束"
+          },
+          {
+            question: "在冰島，有一項奇特的法律規定，所有新生兒名字必須在一個官方名單上，這項法規是由哪一個機構負責執行的？",
+            options: ["A. 政府部門", "B. 國家教育局", "C. 名字委員會", "D. 冰島國家博物館"],
+            answer: "C. 名字委員會"
+          },
+          {
+            question: "在摩納哥，有一項奇特的法律禁止居民在某些情況下做什麼？",
+            options: ["A. 在夜間穿著紅色衣服外出", "B. 在公共場所嚼口香糖", "C. 在車內吃冰淇淋", "D. 在街上大聲喧嘩"],
+            answer: "B. 在公共場所嚼口香糖"
+          }
+        ];
+        runQuiz(questions);
+      }
+
+      // 通用測驗執行函式
+      function runQuiz(questions) {
+        let score = 0;
+        let currentQuestion = 0;
+
+        // 顯示問題
+        function showQuestion() {
+          const questionContainer = document.getElementById("quiz-container");
+          questionContainer.innerHTML = `
+            <h3>${questions[currentQuestion].question}</h3>
+            ${questions[currentQuestion].options
+              .map(
+                (option) =>
+                  `<button class="answer-button" onclick="checkAnswer('${option}')">${option}</button>`
+              )
+              .join("")}
+          `;
+        }
+
+        // 檢查答案
+        window.checkAnswer = function (selectedOption) {
+          const correctAnswer = questions[currentQuestion].answer;
+          if (selectedOption === correctAnswer) {
+            alert("✅ 答對了！");
+            score++;
+          } else {
+            alert(`❌ 答錯了！正確答案是：${correctAnswer}`);
+          }
+
+          currentQuestion++;
+          if (currentQuestion < questions.length) {
+            showQuestion();
+          } else {
+            alert(`測驗結束！你的得分是：${score}/${questions.length}`);
+            document.getElementById("quiz-container").innerHTML = ""; // 清空測驗內容
+            showCongratsAnimation(); // 顯示「你真棒！」動畫
+          }
+        };
+
+        // 初始化測驗
+        const quizContainer = document.getElementById("quiz-container");
+        quizContainer.style.display = "block";
+        showQuestion();
+      }
+    </script>
+
+    <style>
+      /* 按鈕樣式與動畫 */
+      .animated-button {
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .animated-button:hover {
+        background-color: #0056b3;
+      }
+
+      /* 測驗按鈕樣式 */
+      .quiz-button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .quiz-button:hover {
+        background-color: #218838;
+      }
+
+      /* 難度選擇按鈕樣式 */
+      .difficulty-button {
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        padding: 15px 25px;
+        font-size: 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin: 10px;
+        display: inline-block;
+      }
+
+      .difficulty-button:hover {
+        background-color: #0056b3;
+      }
+
+      /* 答案按鈕樣式 */
+      .answer-button {
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        padding: 15px 25px;
+        font-size: 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin: 10px 0;
+        display: block;
+        width: 100%;
+        text-align: center;
+      }
+
+      .answer-button:hover {
+        background-color: #0056b3;
+      }
+
+      /* 「你真棒！」動畫樣式 */
+      .congrats-animation {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 36px;
+        font-weight: bold;
+        color: #28a745;
+        background-color: #fff;
+        padding: 20px 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        animation: fadeInOut 3s ease-in-out;
+        z-index: 1000;
+      }
+
+      @keyframes fadeInOut {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, -60%);
+        }
+        50% {
+          opacity: 1;
+          transform: translate(-50%, -50%);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-50%, -40%);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="cards">
+      <article class="card">
+        <div>
+          <h2>自我介紹</h2>
+    
+          <p></p>
+    
+          <button class="animated-button" onclick="openYouTube()">Watch</button>
+        </div>
+      </article>
+    
+      <article class="card">
+        <div>
+          <h2>作品集</h2>
+    
+          <p></p>
+    
+          <ul>
+            <li><a href="https://hackmd.io/@m54DzLTORL2G4e3BsesC9g/rytJ2k_jyx" target="_blank">第一周</a></li>
+            <li><a href="https://hackmd.io/@m54DzLTORL2G4e3BsesC9g/H1AA3MZ2kx" target="_blank">第二周</a></li>
+            <li><a href="https://hackmd.io/@m54DzLTORL2G4e3BsesC9g/rySSO9Qake" target="_blank">第三周</a></li>
+            <li><a href="https://yuchiao12.github.io/0411/#portfolio" target="_blank">第四周</a></li>
+          </ul>
+        </div>
+      </article>
+    
+      <article class="card">
+        <div>
+          <h2>測驗卷</h2>
+    
+          <p></p>
+    
+          <button class="quiz-button" onclick="startQuiz()">開始測驗</button>
+        </div>
+      </article>
+    
+      <article class="card">
+        <div>
+          <h2>教學影片</h2>
+    
+          <p></p>
+    
+          <button class="animated-button" onclick="showVideo()">觀看影片</button>
+          <br>
+          <a href="#" onclick="showVideo()">Read more</a>
+    
+          <!-- 隱藏的影片容器 -->
+          <div id="video-container" style="display: none; margin-top: 10px;">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/8Xw3zpGw8I8" 
+                    title="YouTube video player" frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen></iframe>
+          </div>
+        </div>
+      </article>
+    
+    </div>
+
+    <div id="quiz-container" style="display: none;"></div>
+
+    <div class="floating-text">
+      <script>
+        const floatingTextContainer = document.querySelector(".floating-text");
+        const colors = [
+          "rgba(255, 182, 193, 0.8)", // 粉色
+          "rgba(0, 0, 0, 0.8)",       // 黑色
+          "rgba(90, 61, 43, 0.8)",    // 深棕色
+          "rgba(255, 223, 0, 0.8)"    // 黃色
+        ];
+
+        for (let i = 0; i < 500; i++) {
+          const span = document.createElement("span");
+          span.textContent = "tkuet";
+          span.style.top = `${Math.random() * 100}%`; // 隨機垂直位置
+          span.style.left = `${Math.random() * 100}%`; // 隨機水平位置
+          span.style.fontSize = `${20 + Math.random() * 80}px`; // 隨機大小，範圍 20px 到 100px
+          span.style.color = colors[Math.floor(Math.random() * colors.length)]; // 隨機顏色
+          span.style.setProperty("--random-size", Math.random()); // 隨機大小參數
+          span.style.setProperty("--random-duration", `${5 + Math.random() * 15}s`); // 隨機飄動速度，範圍 5 秒到 20 秒
+          floatingTextContainer.appendChild(span);
+        }
+      </script>
+    </div>
+  </body>
+</html>

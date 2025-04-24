@@ -1,0 +1,194 @@
+@layer base, demo;
+@import url(https://fonts.bunny.net/css?family=abel:400);
+
+@property --angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+
+@layer demo {
+    .cards {
+        width: min(100% - 4rem, 600px);
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 3rem;
+    }
+
+    .card {
+        position: relative;
+        border-radius: 15px;
+        padding: 1rem;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* 更深的卡片陰影 */
+        background: #5a3d2b; /* 深棕色背景 */
+        overflow: hidden;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+
+        /* 卡片懸停效果 */
+        &:hover {
+            transform: translateY(-15px) scale(1.1); /* 更明顯的浮動和放大效果 */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4); /* 更深的陰影 */
+        }
+
+        & h2 {
+            font-size: 1.8rem; /* 更大的標題字體 */
+            color: #fff;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7); /* 更明顯的文字陰影 */
+            margin-bottom: 1rem;
+        }
+
+        & p {
+            font-size: 1.1rem; /* 更大的段落字體 */
+            color: #f0f0f0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* 更明顯的段落文字陰影 */
+            line-height: 1.8;
+        }
+
+        & a {
+            display: inline-block;
+            background: linear-gradient(135deg, #8b4513, #a0522d); /* 按鈕背景漸層 */
+            color: #fff;
+            text-decoration: none;
+            padding: 0.7rem 1.5rem; /* 更大的按鈕 */
+            border-radius: 30px; /* 更圓的按鈕 */
+            font-size: 1rem; /* 更大的按鈕字體 */
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* 更深的按鈕陰影 */
+            transition: transform 0.3s ease-in-out, background 0.4s ease;
+
+            &:hover {
+                transform: scale(1.15); /* 更大的放大效果 */
+                background: linear-gradient(135deg, #a0522d, #8b4513); /* 背景顏色反轉 */
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* 更深的按鈕陰影 */
+            }
+        }
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2); /* 更明顯的光暈效果 */
+            border-radius: 15px;
+            pointer-events: none;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.5); /* 更強的卡片邊框光暈 */
+            animation: glow 2s infinite alternate; /* 更快的光暈動畫 */
+        }
+    }
+}
+
+/* 動態光暈動畫 */
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+    100% {
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
+    }
+}
+
+/* general styling */
+@layer base {
+    * {
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg-dark: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1); /* 背景漸層顏色 */
+        --txt-light: rgb(10, 10, 10);
+        --txt-dark: rgb(245, 245, 245);
+    }
+
+    body {
+        background: var(--bg-dark);
+        background-size: 200% 200%; /* 背景漸層流動效果 */
+        animation: gradientFlow 5s linear infinite; /* 動態漸層動畫 */
+        color: var(--txt-dark);
+        min-height: 100svh;
+        margin: 0;
+        padding: 1rem;
+        font-size: 1rem;
+        font-family: "Abel", sans-serif;
+        line-height: 1.5;
+        display: grid;
+        place-items: center;
+        gap: 2rem;
+        overflow-y: auto; /* 允許垂直滾動 */
+        position: relative;
+    }
+
+    /* 動態漸層動畫 */
+    @keyframes gradientFlow {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+    /* 增加背景光暈效果 */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+        animation: glowEffect 3s ease-in-out infinite; /* 動態光暈動畫 */
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    /* 動態光暈動畫 */
+    @keyframes glowEffect {
+        0% {
+            opacity: 0.5;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0.5;
+        }
+    }
+
+    /* 增加背景文字效果 */
+    .floating-text {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+        overflow: hidden;
+    }
+
+    .floating-text span {
+        position: absolute;
+        font-size: calc(20px + (80 * var(--random-size))); /* 隨機大小，範圍 20px 到 100px */
+        font-weight: bold;
+        color: var(--random-color); /* 隨機顏色 */
+        animation: floatText var(--random-duration) linear infinite; /* 隨機飄動速度 */
+    }
+
+    /* 動態文字飄動動畫 */
+    @keyframes floatText {
+        0% {
+            transform: translate(0, 0);
+        }
+        50% {
+            transform: translate(50vw, 50vh);
+        }
+        100% {
+            transform: translate(-50vw, -50vh);
+        }
+    }
+}
